@@ -33,7 +33,7 @@ def retornar_atributos(texto: str):
     response_description="IA Treinada",
     )
 def add_item(item: ItemForTraining):
-    item_id = max([item['id'] for item in items_db]) + 1
+    item_id = (max([item['id'] for item in items_db]) + 1) if len(items_db) != 0 else 1
     new_item = {
         "id": item_id,
         "text": item.text,
@@ -47,10 +47,20 @@ def add_item(item: ItemForTraining):
         json.dump(items_db, f)
 
     NLP_IA.treina_ia_windows(NLP_IA)
-    return new_item
+    return {'message': f'Retorno do item de ID {item_id} feito com sucesso'}
 
-@app.delete("/delete/{item_id}")
+@app.delete("/delete_all/")
+def delete_all_items():
+    item_to_be_deleted = [item for item in items_db if item['id'] != 0]
+    items_db.remove(item_to_be_deleted[0])    
+    print(f"item to be deleted: {item_to_be_deleted}")
+    
+    with open("database.json", "w") as f:
+        json.dump(items_db, f)
+
+@app.delete("/delete_by_id/{item_id}")
 def delete_item(item_id: int):
+    print("passed")
     item_to_be_deleted = [item for item in items_db if item['id'] == item_id]
     items_db.remove(item_to_be_deleted[0])    
     print(f"item to be deleted: {item_to_be_deleted}")
@@ -58,7 +68,7 @@ def delete_item(item_id: int):
     with open("database.json", "w") as f:
         json.dump(items_db, f)
 
-@app.delete("/delete-by-cpf/{item_cpf}")
+@app.delete("/delete_by_cpf/{item_cpf}")
 def delete_item(item_cpf: str):
     item_to_be_deleted = [item for item in items_db if item['CPF'] == item_cpf]
     items_db.remove(item_to_be_deleted[0])    

@@ -62,7 +62,7 @@ class NLP_IA():
         doc = nlp(texto)
 
         print("DOCS: ", doc)
-        print("DOCS: ", doc.ents)
+        print("DOC Ents: ", doc.ents)
         print("Texto: ", texto)
         
         data = {

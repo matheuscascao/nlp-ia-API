@@ -8,7 +8,7 @@
   "email":"",
   "url":"",
   "license":"",
-  "spacy_git_version":"77833bfef",
+  "spacy_git_version":"Unknown",
   "vectors":{
     "width":0,
     "vectors":0,
@@ -52,7 +52,7 @@
         "f":1.0
       }
     },
-    "tok2vec_loss":0.0000000022,
-    "ner_loss":0.0000000064
+    "tok2vec_loss":0.0000000039,
+    "ner_loss":0.0000000204
   }
 }

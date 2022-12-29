@@ -6,7 +6,7 @@ def treina_ia_windows(classe):
 
     with open('database.json', 'r') as f:
         items_db = json.load(f)
-    path = "output\model-last"
+    path = "output/model-last"
 
     attributes = ["NAME", "CPF"]
     docs = classe_nlp.retorna_docs_preparados(path, items_db, attributes)

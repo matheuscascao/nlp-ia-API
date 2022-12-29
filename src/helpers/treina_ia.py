@@ -9,7 +9,7 @@ def treina_ia_windows(classe):
     path = "output\model-last"
 
     attributes = ["NAME", "CPF"]
-    docs = classe_nlp.cria_ents(path, items_db, attributes)
+    docs = classe_nlp.retorna_docs_preparados(path, items_db, attributes)
 
     data_treinada = classe_nlp.treinar(docs)
     classe_nlp.salvar_arquivo(data_treinada['data_treino'],

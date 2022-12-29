@@ -81,13 +81,14 @@ class NLP_IA():
         doc = nlp(texto)
 
         print("DOCS: ", doc)
-        print("DOCSa: ", doc.ents)
+        print("Ents: ", doc.ents)
         
         data = {
             "texto_bruto": texto,
-            doc.ents[0].label_: doc.ents[0].text,
-            doc.ents[1].label_: doc.ents[1].text
         }
+
+        for ent in doc.ents:
+            data[ent.label_]: data[ent.text]
 
         return data
 

@@ -26,28 +26,47 @@ class NLP_IA():
         
         return data_final
 
-    def cria_ents(self, model, data, attributes):
+    def __cria_obj_ents(self, model, data, attributes):
+        # Retorna lista de objetos com atributos: matches
         nlp = spacy.load(model)
-        matcher = PhraseMatcher(nlp.vocab)
-        
-        print(data)
+
+        # Lista de objetos com texto e atributos: 
         dadosPreparados = []
         for item in data:
-            doc = nlp(item["text"])
-            for index, attribute in enumerate(attributes):
+            matchesObjeto = {
+                "text": item["text"]
+            }
+
+            for attribute in attributes:
+                doc = nlp(item["text"])
                 pattern = [nlp.make_doc(item[attribute])]
+
+                matcher = PhraseMatcher(nlp.vocab)
                 matcher.add(attribute, pattern)
+                matches = matcher(doc)  
                 
-                matches = matcher(doc)
+                matchesObjeto[attribute] = matches[0] #retorna uma tupla com os dados do match: id, posicao inicial, posicao final
 
-                doc.set_ents([Span(doc, matches[index][1], matches[index][2], label=attribute)], default="unmodified")
-                print("")
-                print("DOC: ", doc)
-                print("DOC: ", doc.ents)
-                dadosPreparados.append(doc)
+            dadosPreparados.append(matchesObjeto)
+        return dadosPreparados # lista de objetos: recebe uma lista de objetos e retorna outra lista de objetos com texto e informações sobre os atributos 
+    
+    def retorna_docs_preparados(self, model, data, attributes):
+        #retorna lista de docs com ents adicionados com base na __cria_obj_ents
+        nlp = spacy.load(model)
+        data = self.__cria_obj_ents(model, data, attributes)
 
-        return dadosPreparados
+        docs_com_ents = []
+        for item in data:
+            print(item)
+            doc = nlp(item["text"])
+            doc.ents = ""
+            for attribute in attributes:
+                doc.set_ents([Span(doc, item[attribute][1], item[attribute][2], label=attribute)], default="unmodified") #Adiciona as ents ao doc
+                print("-------------------------------------")
+            docs_com_ents.append(doc) # a cada iteracao da lista, adiciona um doc a lista de docs
 
+        return docs_com_ents
+    
     def salvar_arquivo(self, data_treino, data_dev):
         data_treino.to_disk("./train.spacy")
         data_dev.to_disk("./dev.spacy")
@@ -62,14 +81,14 @@ class NLP_IA():
         doc = nlp(texto)
 
         print("DOCS: ", doc)
-        print("DOC Ents: ", doc.ents)
-        print("Texto: ", texto)
+        print("DOCSa: ", doc.ents)
         
         data = {
             "texto_bruto": texto,
             doc.ents[0].label_: doc.ents[0].text,
             doc.ents[1].label_: doc.ents[1].text
         }
+
         return data
 
     @staticmethod

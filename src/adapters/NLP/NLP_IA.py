@@ -97,4 +97,4 @@ class NLP_IA():
         print("Treinando IA com os arquivos")
 
         treina_ia_windows(self)
-        os.system("python -m spacy train config.cfg --output output --paths.train train.spacy --paths.dev dev.spacy")
+        os.system("python3 -m spacy train config.cfg --output output --paths.train train.spacy --paths.dev dev.spacy")

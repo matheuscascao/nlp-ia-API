@@ -7,7 +7,7 @@ from random import shuffle
 import os
 
 from src.helpers.treina_ia import treina_ia_windows
-
+ 
 class NLP_IA():
     def __init__(self):
         pass
@@ -88,9 +88,12 @@ class NLP_IA():
         }
 
         for ent in doc.ents:
-            data[ent.label_]: data[ent.text]
-
+            print(f"LABEL: {ent.label_}; DATA: {ent.text}")
+            data[ent.label_] = ent.text
+            # print(data[ent.label_], data[ent.text])
         return data
+
+        
 
     @staticmethod
     def treina_ia_windows(self):
